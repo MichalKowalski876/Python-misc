@@ -1,39 +1,37 @@
 import time
 
-with open('Pan_Tadeusz.txt', 'r', encoding='utf-8') as f:
+with open('Pan_Tadeusz_frag.txt', 'r', encoding='utf-8') as f:
     tekst = f.read()
 
 
 def code_trans(var):
-    lewa = ''
-    prawa = ''
-    for i, znak in enumerate(tekst):
-        if i % 2 == 0:
-            prawa += znak
-        else:
-            lewa = znak + lewa
-        res = prawa + lewa
-    return res
+    res = ''
+    while len(var) >= 2:
+        res += var[0] + var[-1]
+        var = var[1:-1]
+    return res + var
 
 
 def decode_trans(var):
-    mid = (len(var) + 1) // 2
-    prawa = var[:mid]
-    lewa_rev = var[mid:]
-    lewa = lewa_rev[::-1]
+    res = [''] * len(var)
+    lewa = 0
+    prawa = len(var) - 1
+    i = 0
 
-    res = ''
-    for i in range(len(var)):
-        if i % 2 == 0:
-            res += prawa[i // 2]
-        else:
-            res += lewa[i // 2]
+    while lewa <= prawa:
+        res[lewa] = var[i]
+        res[prawa] = var[i+1]
+        i += 2
+        lewa += 1
+        prawa -=1
 
-    return res
+    if lewa == prawa:
+        res[lewa] = var[i]
+    return ''.join(res)
 
 
 start = time.time()
-print((decode_trans(code_trans(tekst))))
+print(decode_trans(code_trans(tekst)))
 stop = time.time()
 comp_time = stop - start
-#print(f'time: {comp_time}')
+# print(f'time: {comp_time}')
