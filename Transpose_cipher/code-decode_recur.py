@@ -4,7 +4,7 @@ import sys
 
 sys.setrecursionlimit(20000)
 
-with open('Pan_Tadeusz_frag.txt', 'r', encoding='utf-8') as f:
+with open('pan_tadeusz_fragment.txt', 'r', encoding='utf-8') as f:
     tekst = f.read()
 
 def code_trans(var):
@@ -13,22 +13,29 @@ def code_trans(var):
     else:
         return var
 
-def decode_trans(var):
-    res = [''] * len(var)
-    lewa = 0
-    prawa = len(var) - 1
-    i = 0
-    while lewa <= prawa:
-        if i < len(var):
-            res[lewa] = var[i]
-            i += 1
-        if i < len(var) and lewa != prawa:
-            res[prawa] = var[i]
-            i += 1
+def decode_trans(var, lewa=0, prawa=None, i=0, res=None):
+    if res is None:
+        res = [''] * len(var)
+        prawa = len(var) - 1
+    if lewa > prawa:
+        return ''.join(res)
+    res[lewa] = var[i]
+    i += 1
 
-        lewa += 1
-        prawa -= 1
+    if lewa != prawa and i < len(var):
+        res[prawa] = var[i]
+        i += 1
+    return decode_trans(var, lewa + 1, prawa - 1, i, res)
 
-    return ''.join(res)
 
-print(decode_trans(code_trans(tekst)))
+start_code = time.time()
+code_trans(tekst)
+stop_code = time.time()
+
+szyfr = code_trans(tekst)
+
+start_decode = time.time()
+decode_trans(code_trans(tekst))
+stop_decode = time.time()
+
+print(f'Czas szyfrowania: {stop_code - start_code},   czas odszyfrowania: {stop_decode - start_decode},   suma: {stop_decode-start_code}')
