@@ -1,6 +1,6 @@
 import time
 
-with open('Pan_Tadeusz_frag.txt', 'r', encoding='utf-8') as f:
+with open('pan_tadeusz_fragment.txt', 'r', encoding='utf-8') as f:
     tekst = f.read()
 
 
@@ -18,7 +18,7 @@ def decode_trans(var):
     prawa = len(var) - 1
     i = 0
 
-    while lewa <= prawa:
+    while lewa < prawa:
         res[lewa] = var[i]
         res[prawa] = var[i+1]
         i += 2
@@ -30,8 +30,14 @@ def decode_trans(var):
     return ''.join(res)
 
 
-start = time.time()
-print(decode_trans(code_trans(tekst)))
-stop = time.time()
-comp_time = stop - start
-# print(f'time: {comp_time}')
+start_code = time.time()
+code_trans(tekst)
+stop_code = time.time()
+
+szyfr = code_trans(tekst)
+
+start_decode = time.time()
+decode_trans(code_trans(tekst))
+stop_decode = time.time()
+
+print(f'Czas szyfrowania: {stop_code - start_code},   czas odszyfrowania: {stop_decode - start_decode},   suma: {stop_decode-start_code}')
